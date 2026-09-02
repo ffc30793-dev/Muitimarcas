@@ -1,40 +1,34 @@
-const year = document.getElementById("year");
-year.textContent = new Date().getFullYear();
+document.getElementById("year").textContent = new Date().getFullYear();
 
-const menuBtn = document.querySelector(".menu-btn");
+const menu = document.querySelector(".menu-btn");
 const nav = document.querySelector(".nav");
-
-menuBtn?.addEventListener("click", () => {
-  const open = menuBtn.getAttribute("aria-expanded") === "true";
-  menuBtn.setAttribute("aria-expanded", String(!open));
-  nav.classList.toggle("mobile-open", !open);
+menu?.addEventListener("click", () => {
+  const open = menu.getAttribute("aria-expanded") === "true";
+  menu.setAttribute("aria-expanded", String(!open));
+  nav.classList.toggle("show", !open);
 });
 
-document.querySelectorAll(".nav a").forEach(a => {
-  a.addEventListener("click", () => {
-    nav.classList.remove("mobile-open");
-    menuBtn?.setAttribute("aria-expanded", "false");
-  });
-});
+document.querySelectorAll(".nav a").forEach(a => a.addEventListener("click", () => {
+  nav.classList.remove("show");
+  menu?.setAttribute("aria-expanded", "false");
+}));
 
 const lightbox = document.querySelector(".lightbox");
-const lightboxImg = lightbox?.querySelector("img");
-const closeLightbox = () => {
-  lightbox?.classList.remove("open");
-  lightbox?.setAttribute("aria-hidden", "true");
-};
-document.querySelectorAll(".gallery-item").forEach(item => {
-  item.addEventListener("click", () => {
-    if (!lightbox || !lightboxImg) return;
-    lightboxImg.src = item.dataset.src;
+const lightImg = lightbox.querySelector("img");
+document.querySelectorAll(".photo").forEach(btn => {
+  btn.addEventListener("click", () => {
+    lightImg.src = btn.querySelector("img").src;
     lightbox.classList.add("open");
-    lightbox.setAttribute("aria-hidden", "false");
+    lightbox.setAttribute("aria-hidden","false");
   });
 });
-document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
-lightbox?.addEventListener("click", e => {
-  if (e.target === lightbox) closeLightbox();
+lightbox.querySelector("button").addEventListener("click", () => {
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden","true");
+});
+lightbox.addEventListener("click", e => {
+  if(e.target === lightbox) lightbox.classList.remove("open");
 });
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeLightbox();
+  if(e.key === "Escape") lightbox.classList.remove("open");
 });
